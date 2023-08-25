@@ -4,6 +4,7 @@ import type { Schema } from './typings';
 import 'dotenv/config';
 import { createAgent } from '@forestadmin/agent';
 import { createSqlDataSource } from '@forestadmin/datasource-sql';
+import usersCustomization from './customizations/users';
 
 const agent = createAgent<Schema>({
   authSecret: process.env.FOREST_AUTH_SECRET!,
@@ -15,13 +16,15 @@ const agent = createAgent<Schema>({
   typingsMaxDepth: 5,
 });
 
-agent.addDataSource(
-  createSqlDataSource({
-    uri: process.env.DATABASE_URL,
-    schema: process.env.DATABASE_SCHEMA,
-    sslMode: process.env.DATABASE_SSL_MODE as SslMode,
-  }),
-);
+agent
+  .addDataSource(
+    createSqlDataSource({
+      uri: process.env.DATABASE_URL,
+      schema: process.env.DATABASE_SCHEMA,
+      sslMode: process.env.DATABASE_SSL_MODE as SslMode,
+    }),
+  )
+  .customizeCollection('users', usersCustomization);
 
 agent.mountOnStandaloneServer(Number(process.env.APPLICATION_PORT));
 

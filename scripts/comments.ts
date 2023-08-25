@@ -17,7 +17,7 @@ export default async function populateComments (client: PoolClient, userIds: num
     );
   `);
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 40; i++) {
       const comment = {
         ticket_id: faker.helpers.arrayElement(ticketIds),
         comment_from: faker.helpers.arrayElement(userIds),

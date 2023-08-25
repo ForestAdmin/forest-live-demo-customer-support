@@ -18,7 +18,7 @@ export default async function populateTickets (client: PoolClient, userIds: numb
     );
   `);
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 20; i++) {
       const ticket = {
         owner: faker.helpers.arrayElement(userIds),
         opened_by: faker.helpers.arrayElement(userIds),

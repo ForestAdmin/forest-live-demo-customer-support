@@ -18,7 +18,7 @@ export default async function populateOrders(client: PoolClient, userIds: number
     );
   `);
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 90; i++) {
       const order = {
         user_id: faker.helpers.arrayElement(userIds),
         coupon: faker.string.alphanumeric({ length: { min: 1, max: 10 } }),

@@ -973,24 +973,21 @@
       "segments": []
     },
     {
-      "actions": [],
-      "fields": [
+      "actions": [
         {
-          "defaultValue": null,
-          "enums": [],
-          "field": "address",
-          "integration": null,
-          "inverseOf": null,
-          "isFilterable": true,
-          "isPrimaryKey": false,
-          "isReadOnly": false,
-          "isRequired": false,
-          "isSortable": true,
-          "isVirtual": false,
-          "reference": null,
-          "type": "String",
-          "validations": []
-        },
+          "id": "users-0-anonymize-user",
+          "name": "Anonymize user",
+          "type": "bulk",
+          "baseUrl": null,
+          "endpoint": "/forest/_actions/users/0/anonymize-user",
+          "httpMethod": "POST",
+          "redirect": null,
+          "download": false,
+          "fields": [],
+          "hooks": {"load": false, "change": ["changeHook"]}
+        }
+      ],
+      "fields": [
         {
           "defaultValue": null,
           "enums": null,
@@ -1114,6 +1111,22 @@
           "integration": null,
           "inverseOf": null,
           "isFilterable": true,
+          "isPrimaryKey": false,
+          "isReadOnly": false,
+          "isRequired": false,
+          "isSortable": true,
+          "isVirtual": false,
+          "reference": null,
+          "type": "String",
+          "validations": []
+        },
+        {
+          "defaultValue": null,
+          "enums": [],
+          "field": "fullname",
+          "integration": null,
+          "inverseOf": null,
+          "isFilterable": false,
           "isPrimaryKey": false,
           "isReadOnly": false,
           "isRequired": false,

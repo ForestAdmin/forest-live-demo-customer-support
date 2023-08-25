@@ -16,7 +16,7 @@ export default async function populateMessages (client: PoolClient, userIds: num
     );
   `);
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 1000; i++) {
       const message = {
         sender: faker.helpers.arrayElement(userIds),
         receiver: faker.helpers.arrayElement(userIds),

@@ -15,7 +15,7 @@ export default async function populateCoupons(client: PoolClient, userIds: numbe
     );
   `);
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 15; i++) {
       const coupon = {
         user_id: faker.helpers.arrayElement(userIds),
         discount_amount: faker.finance.amount(),

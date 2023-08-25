@@ -102,8 +102,8 @@ export type Schema = {
       'user:birthdate': string;
       'user:password': string;
       'user:cellphone': string;
-      'user:address': string;
       'user:is_blocked': boolean;
+      'user:fullname': string;
     };
   };
   'billing_infos': {
@@ -127,8 +127,8 @@ export type Schema = {
       'user:birthdate': string;
       'user:password': string;
       'user:cellphone': string;
-      'user:address': string;
       'user:is_blocked': boolean;
+      'user:fullname': string;
     };
   };
   'comments': {
@@ -160,8 +160,8 @@ export type Schema = {
       'ticket:user_through_owner:birthdate': string;
       'ticket:user_through_owner:password': string;
       'ticket:user_through_owner:cellphone': string;
-      'ticket:user_through_owner:address': string;
       'ticket:user_through_owner:is_blocked': boolean;
+      'ticket:user_through_owner:fullname': string;
       'ticket:user_through_opened_by:id': number;
       'ticket:user_through_opened_by:email': string;
       'ticket:user_through_opened_by:signup_date': string;
@@ -171,8 +171,8 @@ export type Schema = {
       'ticket:user_through_opened_by:birthdate': string;
       'ticket:user_through_opened_by:password': string;
       'ticket:user_through_opened_by:cellphone': string;
-      'ticket:user_through_opened_by:address': string;
       'ticket:user_through_opened_by:is_blocked': boolean;
+      'ticket:user_through_opened_by:fullname': string;
       'user:id': number;
       'user:email': string;
       'user:signup_date': string;
@@ -182,8 +182,8 @@ export type Schema = {
       'user:birthdate': string;
       'user:password': string;
       'user:cellphone': string;
-      'user:address': string;
       'user:is_blocked': boolean;
+      'user:fullname': string;
     };
   };
   'coupons': {
@@ -206,8 +206,8 @@ export type Schema = {
       'user:birthdate': string;
       'user:password': string;
       'user:cellphone': string;
-      'user:address': string;
       'user:is_blocked': boolean;
+      'user:fullname': string;
     };
   };
   'messages': {
@@ -232,8 +232,8 @@ export type Schema = {
       'user_through_sender:birthdate': string;
       'user_through_sender:password': string;
       'user_through_sender:cellphone': string;
-      'user_through_sender:address': string;
       'user_through_sender:is_blocked': boolean;
+      'user_through_sender:fullname': string;
       'user_through_receiver:id': number;
       'user_through_receiver:email': string;
       'user_through_receiver:signup_date': string;
@@ -243,8 +243,8 @@ export type Schema = {
       'user_through_receiver:birthdate': string;
       'user_through_receiver:password': string;
       'user_through_receiver:cellphone': string;
-      'user_through_receiver:address': string;
       'user_through_receiver:is_blocked': boolean;
+      'user_through_receiver:fullname': string;
     };
   };
   'orders': {
@@ -270,8 +270,8 @@ export type Schema = {
       'user:birthdate': string;
       'user:password': string;
       'user:cellphone': string;
-      'user:address': string;
       'user:is_blocked': boolean;
+      'user:fullname': string;
     };
   };
   'plans': {
@@ -315,8 +315,8 @@ export type Schema = {
       'user:birthdate': string;
       'user:password': string;
       'user:cellphone': string;
-      'user:address': string;
       'user:is_blocked': boolean;
+      'user:fullname': string;
     };
   };
   'tickets': {
@@ -343,8 +343,8 @@ export type Schema = {
       'user_through_owner:birthdate': string;
       'user_through_owner:password': string;
       'user_through_owner:cellphone': string;
-      'user_through_owner:address': string;
       'user_through_owner:is_blocked': boolean;
+      'user_through_owner:fullname': string;
       'user_through_opened_by:id': number;
       'user_through_opened_by:email': string;
       'user_through_opened_by:signup_date': string;
@@ -354,8 +354,8 @@ export type Schema = {
       'user_through_opened_by:birthdate': string;
       'user_through_opened_by:password': string;
       'user_through_opened_by:cellphone': string;
-      'user_through_opened_by:address': string;
       'user_through_opened_by:is_blocked': boolean;
+      'user_through_opened_by:fullname': string;
     };
   };
   'users': {
@@ -369,8 +369,8 @@ export type Schema = {
       'birthdate': string;
       'password': string;
       'cellphone': string;
-      'address': string;
       'is_blocked': boolean;
+      'fullname': string;
     };
     nested: {};
     flat: {};

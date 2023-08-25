@@ -4,7 +4,6 @@ import { PoolClient, QueryResult } from 'pg';
 export default async function populateUsers(client: PoolClient): Promise<number[]> {
     const ids: number[] = [];
 
-
     await client.query('DROP TABLE IF EXISTS "users" CASCADE');
 
     await client.query(`
@@ -18,12 +17,11 @@ export default async function populateUsers(client: PoolClient): Promise<number[
         birthdate DATE,
         password VARCHAR(255) NOT NULL,
         cellphone VARCHAR(30),
-        address VARCHAR(255),
         is_blocked BOOLEAN
       );`
     );
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 150; i++) {
         const user = {
           email: faker.internet.email(),
           signup_date: faker.date.past(),
@@ -33,12 +31,11 @@ export default async function populateUsers(client: PoolClient): Promise<number[
           birthdate: faker.date.past(), 
           password: faker.internet.password(), 
           cellphone: faker.phone.number(), 
-          address: faker.location.streetAddress(), 
           is_blocked: faker.datatype.boolean(),
         };
 
         const insertQuery = {
-            text: 'INSERT INTO "users" (email, signup_date, lastname, firstname, identity_picture, birthdate, password, cellphone, address, is_blocked) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id',
+            text: 'INSERT INTO "users" (email, signup_date, lastname, firstname, identity_picture, birthdate, password, cellphone, is_blocked) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
             values: Object.values(user),
         };
 

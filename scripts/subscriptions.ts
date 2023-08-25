@@ -16,7 +16,7 @@ export default async function populateSubscriptions (client: PoolClient, userIds
     );
   `);
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 80; i++) {
       const subscription = {
         plan_id: faker.helpers.arrayElement(planIds),
         user_id: faker.helpers.arrayElement(userIds),
