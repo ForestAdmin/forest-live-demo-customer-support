@@ -883,7 +883,7 @@
           "enums": null,
           "field": "user",
           "integration": null,
-          "inverseOf": "subscriptions",
+          "inverseOf": "subscription",
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
@@ -1099,8 +1099,21 @@
           "httpMethod": "POST",
           "redirect": null,
           "download": false,
-          "fields": [{"field": "plan", "type": "Number", "reference": "plans.id"}],
-          "hooks": {"load": false, "change": ["changeHook"]}
+          "fields": [
+            {
+              "field": "Loading...",
+              "type": "String",
+              "isReadOnly": true,
+              "defaultValue": "Form is loading",
+              "description": "",
+              "enums": null,
+              "hook": null,
+              "isRequired": false,
+              "reference": null,
+              "widgetEdit": null
+            }
+          ],
+          "hooks": {"load": true, "change": ["changeHook"]}
         },
         {
           "id": "users-3-moderate",
@@ -1439,18 +1452,18 @@
         {
           "defaultValue": null,
           "enums": null,
-          "field": "subscriptions",
+          "field": "subscription",
           "integration": null,
           "inverseOf": "user",
-          "isFilterable": false,
+          "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
           "isRequired": false,
           "isSortable": true,
           "isVirtual": false,
           "reference": "subscriptions.id",
-          "relationship": "HasMany",
-          "type": ["Number"],
+          "relationship": "HasOne",
+          "type": "Number",
           "validations": []
         },
         {

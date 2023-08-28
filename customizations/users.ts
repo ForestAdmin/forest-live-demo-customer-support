@@ -88,17 +88,22 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
       label: 'plan',
       collectionName: 'plans',
       type: 'Collection',
+      isRequired: true,
+      defaultValue: async (context) => [(await context.getRecord(['subscription:plan_id'])).subscription?.plan_id],
     }],
     execute: async (context, resultBuilder) => {
       const [newPlanId] = context.formValues.plan;
-      const userId = await context.getRecordId();
+      const record = await context.getRecord(['subscription:id']);
+      const { subscription } = record;
+
+      if (!subscription.id) return resultBuilder.error(`You can not change the plan, the user does not have subscriptions yet.`);
 
       try {
         await context.dataSource.getCollection('subscriptions').update({
           conditionTree: {
-            field: 'user_id',
+            field: 'id',
             operator: 'Equal',
-            value: userId,
+            value: subscription.id,
           },
         }, { plan_id: newPlanId });
 
