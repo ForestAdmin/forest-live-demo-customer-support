@@ -55,7 +55,27 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
           firstname: 'Anonymous',
           lastname: 'Anonymous',
           email: 'anonymous@anonymous.anonymous',
+          identity_picture: null,
+          cellphone: 'Unknown',
+          password: '',
+          is_blocked: true,
+          signup_date: null,
         });
+
+        await context.dataSource.getCollection('addresses').update({
+          conditionTree: {
+            field: 'user_id',
+            operator: 'In',
+            value: userIds,
+          }
+        }, {
+          user_id: null,
+          country: 'Unknown',
+          city: 'Unknown',
+          street: 'Unknown',
+          number: '0',
+        });
+
         return resultBuilder.success('User(s) anonymized!');
       } catch(error) {
         return resultBuilder.error(`Failed to anonymize user(s) ${error.message}.`);

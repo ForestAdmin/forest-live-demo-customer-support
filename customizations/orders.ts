@@ -25,6 +25,7 @@ export default (orders: CollectionCustomizer<Schema, 'orders'>) => {
       dependencies: ['coupon:discount_percent', 'coupon:discount_amount', 'initial_amount'],
       getValues: (records) => {
         return records.map((record) => {
+          // @TODO - Discuss this with the team.
           const discountPercent = Number(record.coupon?.discount_percent || 0);
           const discountAmount = Number(record.coupon?.discount_amount || 0);
           const initialAmount = record['initial_amount'];
