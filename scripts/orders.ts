@@ -18,10 +18,15 @@ export default async function populateOrders(client: Pool, userIds: number[], co
     );
   `);
 
+  // We don't want to use all the coupons, so we filter them
+  const filteredCouponIds = couponsIds.filter((_, index) => (index%2));
+  // We also want to allow null values
+  filteredCouponIds.push(null);
+
   for (let i = 0; i < 90; i++) {
       const order = {
         user_id: faker.helpers.arrayElement(userIds),
-        coupon_id: faker.helpers.arrayElement(couponsIds),
+        coupon_id: faker.helpers.arrayElement(filteredCouponIds),
         initial_amount: faker.finance.amount(),
         date: faker.date.recent(),
         paid: faker.datatype.boolean(),

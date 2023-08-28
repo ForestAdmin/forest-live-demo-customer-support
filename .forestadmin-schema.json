@@ -511,8 +511,37 @@
       "segments": []
     },
     {
-      "actions": [],
+      "actions": [
+        {
+          "id": "orders-0-apply-a-coupon",
+          "name": "Apply a coupon",
+          "type": "single",
+          "baseUrl": null,
+          "endpoint": "/forest/_actions/orders/0/apply-a-coupon",
+          "httpMethod": "POST",
+          "redirect": null,
+          "download": false,
+          "fields": [{"field": "Coupon", "type": "Number", "reference": "coupons.id"}],
+          "hooks": {"load": false, "change": ["changeHook"]}
+        }
+      ],
       "fields": [
+        {
+          "defaultValue": null,
+          "enums": [],
+          "field": "amount_with_discount",
+          "integration": null,
+          "inverseOf": null,
+          "isFilterable": false,
+          "isPrimaryKey": false,
+          "isReadOnly": true,
+          "isRequired": false,
+          "isSortable": false,
+          "isVirtual": false,
+          "reference": null,
+          "type": "Number",
+          "validations": []
+        },
         {
           "defaultValue": null,
           "enums": null,
@@ -1431,7 +1460,7 @@
   ],
   "meta": {
     "liana": "forest-nodejs-agent",
-    "liana_version": "1.16.2",
+    "liana_version": "1.17.0",
     "liana_features": null,
     "stack": {"engine": "nodejs", "engine_version": "18.14.0"}
   }

@@ -257,6 +257,7 @@ export type Schema = {
       'date': string;
       'paid': boolean;
       'pay_date': string;
+      'amount_with_discount': number;
     };
     nested: {
       'user': Schema['users']['plain'] & Schema['users']['nested'];
