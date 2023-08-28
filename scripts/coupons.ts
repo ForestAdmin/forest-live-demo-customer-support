@@ -11,7 +11,8 @@ export default async function populateCoupons(client: Pool, userIds: number[]): 
         id SERIAL PRIMARY KEY,
         user_id INT REFERENCES users(id),
         discount_amount NUMERIC,
-        discount_percent NUMERIC
+        discount_percent NUMERIC,
+        name VARCHAR(255)
     );
   `);
 
@@ -20,10 +21,11 @@ export default async function populateCoupons(client: Pool, userIds: number[]): 
         user_id: faker.helpers.arrayElement(userIds),
         discount_amount: faker.finance.amount(),
         discount_percent: faker.finance.amount(),
+        name: faker.string.alphanumeric({ length: { min: 5, max: 10}})
       };
 
       const insertQuery = {
-          text: 'INSERT INTO "coupons" (user_id, discount_amount, discount_percent) VALUES ($1, $2, $3) RETURNING id',
+          text: 'INSERT INTO "coupons" (user_id, discount_amount, discount_percent, name) VALUES ($1, $2, $3, $4) RETURNING id',
           values: Object.values(coupon),
       };
 

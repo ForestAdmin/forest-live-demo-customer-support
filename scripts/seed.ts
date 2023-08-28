@@ -26,9 +26,11 @@ const pool = new Pool({
   console.log('Creating addresses...');
   await createAddresses(pool, userIds);
   console.log('Creating billing infos...');
+  console.log('Creating coupons...');
+  const couponIds = await createCoupons(pool, userIds);
   await createBillingInfos(pool, userIds);
   console.log('Creating orders...');
-  await createOrders(pool, userIds);
+  await createOrders(pool, userIds, couponIds);
   console.log('Creating plans...');
   const planIds = await createPlans(pool);
   console.log('Creating tickets...');
@@ -39,8 +41,6 @@ const pool = new Pool({
   await createMessages(pool, userIds);
   console.log('Creating comments...');
   await createComments(pool, userIds, ticketIds);
-  console.log('Creating coupons...');
-  await createCoupons(pool, userIds);
   console.log('Tables created!');
   await pool.end();
 })();

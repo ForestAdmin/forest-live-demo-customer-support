@@ -192,6 +192,7 @@ export type Schema = {
       'user_id': number;
       'discount_amount': number;
       'discount_percent': number;
+      'name': string;
     };
     nested: {
       'user': Schema['users']['plain'] & Schema['users']['nested'];
@@ -251,7 +252,7 @@ export type Schema = {
     plain: {
       'id': number;
       'user_id': number;
-      'coupon': string;
+      'coupon_id': number;
       'initial_amount': number;
       'date': string;
       'paid': boolean;
@@ -259,6 +260,7 @@ export type Schema = {
     };
     nested: {
       'user': Schema['users']['plain'] & Schema['users']['nested'];
+      'coupon': Schema['coupons']['plain'] & Schema['coupons']['nested'];
     };
     flat: {
       'user:id': number;
@@ -272,6 +274,22 @@ export type Schema = {
       'user:cellphone': string;
       'user:is_blocked': boolean;
       'user:fullname': string;
+      'coupon:id': number;
+      'coupon:user_id': number;
+      'coupon:discount_amount': number;
+      'coupon:discount_percent': number;
+      'coupon:name': string;
+      'coupon:user:id': number;
+      'coupon:user:email': string;
+      'coupon:user:signup_date': string;
+      'coupon:user:lastname': string;
+      'coupon:user:firstname': string;
+      'coupon:user:identity_picture': string;
+      'coupon:user:birthdate': string;
+      'coupon:user:password': string;
+      'coupon:user:cellphone': string;
+      'coupon:user:is_blocked': boolean;
+      'coupon:user:fullname': string;
     };
   };
   'plans': {

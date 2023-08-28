@@ -18,9 +18,11 @@ export default async function populatePlans(client: Pool): Promise<number[]> {
     );
   `);
 
-  for (let i = 0; i < 4; i++) {
+  const planNames = ['pro', 'plus', 'enterprise', 'free'];
+
+  for (let i = 0; i < planNames.length; i++) {
       const plan = {
-        name: faker.helpers.arrayElement(['pro', 'plus', 'enterprise', 'free']),
+        name: planNames[i],
         monthly_cost: faker.finance.amount(),
         allowed_discount: faker.finance.amount(),
         dedicated_support: faker.datatype.boolean(),
