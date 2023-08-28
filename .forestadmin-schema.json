@@ -1087,6 +1087,31 @@
           "hooks": {"load": false, "change": ["changeHook"]}
         },
         {
+          "id": "users-3-moderate",
+          "name": "Moderate",
+          "type": "single",
+          "baseUrl": null,
+          "endpoint": "/forest/_actions/users/3/moderate",
+          "httpMethod": "POST",
+          "redirect": null,
+          "download": false,
+          "fields": [
+            {
+              "field": "Loading...",
+              "type": "String",
+              "isReadOnly": true,
+              "defaultValue": "Form is loading",
+              "description": "",
+              "enums": null,
+              "hook": null,
+              "isRequired": false,
+              "reference": null,
+              "widgetEdit": null
+            }
+          ],
+          "hooks": {"load": true, "change": ["changeHook"]}
+        },
+        {
           "id": "users-2-reset-password",
           "name": "Reset password",
           "type": "single",

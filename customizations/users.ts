@@ -10,7 +10,7 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
     dependencies: ['firstname', 'lastname'],
     getValues: (records) => {
       return records.map((record) => `${record.firstname} ${record.lastname}`);
-    }
+    },
   })
   /* Allow fullname to be filtered using the contains operator */
   .replaceFieldOperator('fullname', 'Contains', (value) => ({
@@ -23,7 +23,7 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
       field: 'lastname',
       operator: 'Contains',
       value
-    }]
+    }],
   }))
   /* Allow to write in fullname */
   .replaceFieldWriting('fullname', (value) => {
@@ -31,7 +31,7 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
     return {
       firstname,
       lastname,
-    }
+    };
   })
   /* Allow to sort on fullname */
   .replaceFieldSorting('fullname', [
@@ -55,12 +55,12 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
           firstname: 'Anonymous',
           lastname: 'Anonymous',
           email: 'anonymous@anonymous.anonymous',
-        })
+        });
         return resultBuilder.success('User(s) anonymized!');
       } catch(error) {
         return resultBuilder.error(`Failed to anonymize user(s) ${error.message}.`);
       }
-    }
+    },
   })
   .addAction('Change a plan', {
     scope: 'Single',
@@ -86,7 +86,7 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
       }  catch(error) {
         return resultBuilder.error(`Failed to change plan ${error.message}.`);
       }
-    }
+    },
   })
   .addAction('Reset password', {
     scope:'Single',
@@ -106,6 +106,35 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
       }  catch(error) {
         return resultBuilder.error(`Failed to reset password ${error.message}.`);
       }
-    }
+    },
+  })
+  .addAction('Moderate', {
+    scope:'Single',
+    form: [{
+      label: 'reason',
+      type: 'Enum',
+      enumValues: ['resignation', 'dismissal', 'long-term illness', 'other'],
+    }, {
+      label: 'explanation',
+      type: 'String',
+      if: (context) => context.formValues.reason === 'other',
+    }],
+    execute: async (context, resultBuilder) => {
+      const userId = await context.getRecordId();
+
+      try {
+        await context.dataSource.getCollection('users').update({
+          conditionTree: {
+            field: 'id',
+            operator: 'Equal',
+            value: userId,
+          },
+        }, { is_blocked: true });
+
+        return resultBuilder.success('User successfully blocked.');
+      }  catch(error) {
+        return resultBuilder.error(`Failed block user ${error.message}.`);
+      }
+    },
   });
 };
