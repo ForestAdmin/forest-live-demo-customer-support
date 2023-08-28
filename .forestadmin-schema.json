@@ -1056,6 +1056,18 @@
           "download": false,
           "fields": [{"field": "plan", "type": "Number", "reference": "plans.id"}],
           "hooks": {"load": false, "change": ["changeHook"]}
+        },
+        {
+          "id": "users-2-reset-password",
+          "name": "Reset password",
+          "type": "single",
+          "baseUrl": null,
+          "endpoint": "/forest/_actions/users/2/reset-password",
+          "httpMethod": "POST",
+          "redirect": null,
+          "download": false,
+          "fields": [],
+          "hooks": {"load": false, "change": ["changeHook"]}
         }
       ],
       "fields": [

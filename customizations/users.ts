@@ -1,4 +1,5 @@
 import { CollectionCustomizer } from "@forestadmin/agent";
+import { randomBytes } from 'crypto';
 
 import { Schema } from "../typings";
 
@@ -84,6 +85,26 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
         return resultBuilder.success('Plan successfully updated.');
       }  catch(error) {
         return resultBuilder.error(`Failed to change plan ${error.message}.`);
+      }
+    }
+  })
+  .addAction('Reset password', {
+    scope:'Single',
+    execute: async (context, resultBuilder) => {
+      const userId = await context.getRecordId();
+
+      try {
+        await context.dataSource.getCollection('users').update({
+          conditionTree: {
+            field: 'id',
+            operator: 'Equal',
+            value: userId,
+          },
+        }, { password: randomBytes(16).toString('hex') });
+
+        return resultBuilder.success('Password successfully updated, a mail has sended to the user with his new password.');
+      }  catch(error) {
+        return resultBuilder.error(`Failed to reset password ${error.message}.`);
       }
     }
   });
