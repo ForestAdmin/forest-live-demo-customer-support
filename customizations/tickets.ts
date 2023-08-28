@@ -38,5 +38,5 @@ export default (tickets: CollectionCustomizer<Schema, 'tickets'>) => {
           return resultBuilder.error(`Failed to mark ticket(s) as resolved ${error.message}.`);
         }
       }
-    });;
+    });
 };

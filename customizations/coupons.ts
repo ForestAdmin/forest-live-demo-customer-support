@@ -14,6 +14,5 @@ export default (coupons: CollectionCustomizer<Schema, 'coupons'>) => {
 
         return records.map(record => (Number(rows.find(r => r.coupon_id === record.id)?.count) || 0));
       }
-    })
-    
+    });
 };
