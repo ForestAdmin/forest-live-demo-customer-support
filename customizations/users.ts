@@ -1,4 +1,5 @@
 import { CollectionCustomizer } from "@forestadmin/agent";
+
 import { Schema } from "../typings";
 
 export default (users: CollectionCustomizer<Schema, 'users'>) => {
@@ -57,6 +58,32 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
         return resultBuilder.success('User(s) anonymized!');
       } catch(error) {
         return resultBuilder.error(`Failed to anonymize user(s) ${error.message}.`);
+      }
+    }
+  })
+  .addAction('Change a plan', {
+    scope: 'Single',
+    form: [{
+      label: 'plan',
+      collectionName: 'plans',
+      type: 'Collection',
+    }],
+    execute: async (context, resultBuilder) => {
+      const [newPlanId] = context.formValues.plan;
+      const userId = await context.getRecordId();
+
+      try {
+        await context.dataSource.getCollection('subscriptions').update({
+          conditionTree: {
+            field: 'user_id',
+            operator: 'Equal',
+            value: userId,
+          },
+        }, { plan_id: newPlanId });
+
+        return resultBuilder.success('Plan successfully updated.');
+      }  catch(error) {
+        return resultBuilder.error(`Failed to change plan ${error.message}.`);
       }
     }
   });

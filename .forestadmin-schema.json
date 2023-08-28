@@ -1044,6 +1044,18 @@
           "download": false,
           "fields": [],
           "hooks": {"load": false, "change": ["changeHook"]}
+        },
+        {
+          "id": "users-1-change-a-plan",
+          "name": "Change a plan",
+          "type": "single",
+          "baseUrl": null,
+          "endpoint": "/forest/_actions/users/1/change-a-plan",
+          "httpMethod": "POST",
+          "redirect": null,
+          "download": false,
+          "fields": [{"field": "plan", "type": "Number", "reference": "plans.id"}],
+          "hooks": {"load": false, "change": ["changeHook"]}
         }
       ],
       "fields": [
