@@ -7,6 +7,7 @@ import { createSqlDataSource } from '@forestadmin/datasource-sql';
 import usersCustomization from './customizations/users';
 import ticketsCustomization from './customizations/tickets';
 import ordersCustomization from './customizations/orders';
+import couponsCustomization from './customizations/coupons';
 
 const agent = createAgent<Schema>({
   authSecret: process.env.FOREST_AUTH_SECRET!,
@@ -28,7 +29,8 @@ agent
   )
   .customizeCollection('users', usersCustomization)
   .customizeCollection('tickets', ticketsCustomization)
-  .customizeCollection('orders', ordersCustomization);
+  .customizeCollection('orders', ordersCustomization)
+  .customizeCollection('coupons', couponsCustomization);
 
 agent.mountOnStandaloneServer(Number(process.env.APPLICATION_PORT));
 
