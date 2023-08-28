@@ -29,7 +29,7 @@ export default (orders: CollectionCustomizer<Schema, 'orders'>) => {
           const discountAmount = Number(record.coupon?.discount_amount || 0);
           const initialAmount = record['initial_amount'];
           const amountWithDiscount = initialAmount - (initialAmount * (discountPercent / 100)) - discountAmount;
-          console.log(discountPercent, discountAmount, initialAmount, amountWithDiscount, record);
+
           return Math.floor((amountWithDiscount > 0 ? amountWithDiscount : 0)*100)/100;
         });
       }
