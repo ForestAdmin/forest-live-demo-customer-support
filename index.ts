@@ -5,6 +5,7 @@ import 'dotenv/config';
 import { createAgent } from '@forestadmin/agent';
 import { createSqlDataSource } from '@forestadmin/datasource-sql';
 import usersCustomization from './customizations/users';
+import ticketsCustomization from './customizations/tickets';
 
 const agent = createAgent<Schema>({
   authSecret: process.env.FOREST_AUTH_SECRET!,
@@ -24,7 +25,8 @@ agent
       sslMode: process.env.DATABASE_SSL_MODE as SslMode,
     }),
   )
-  .customizeCollection('users', usersCustomization);
+  .customizeCollection('users', usersCustomization)
+  .customizeCollection('tickets', ticketsCustomization);
 
 agent.mountOnStandaloneServer(Number(process.env.APPLICATION_PORT));
 

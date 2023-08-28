@@ -862,7 +862,32 @@
       "segments": []
     },
     {
-      "actions": [],
+      "actions": [
+        {
+          "id": "tickets-0-mark-ticket-s-as-resolved",
+          "name": "Mark ticket(s) as resolved",
+          "type": "bulk",
+          "baseUrl": null,
+          "endpoint": "/forest/_actions/tickets/0/mark-ticket-s-as-resolved",
+          "httpMethod": "POST",
+          "redirect": null,
+          "download": false,
+          "fields": [],
+          "hooks": {"load": false, "change": ["changeHook"]}
+        },
+        {
+          "id": "tickets-1-re-open-ticket-s-",
+          "name": "Re-open ticket(s)",
+          "type": "bulk",
+          "baseUrl": null,
+          "endpoint": "/forest/_actions/tickets/1/re-open-ticket-s-",
+          "httpMethod": "POST",
+          "redirect": null,
+          "download": false,
+          "fields": [],
+          "hooks": {"load": false, "change": ["changeHook"]}
+        }
+      ],
       "fields": [
         {
           "defaultValue": null,
