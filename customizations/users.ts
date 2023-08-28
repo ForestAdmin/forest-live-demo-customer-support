@@ -4,7 +4,7 @@ import { randomBytes } from 'crypto';
 import { Schema } from "../typings";
 
 export default (users: CollectionCustomizer<Schema, 'users'>) => {
-  /* Add a fullname field that is computed from firstname and lastname */
+  /* Add a full name field that is computed from first name and last name */
   users.addField('fullname', {
     columnType: 'String',
     dependencies: ['firstname', 'lastname'],
@@ -25,7 +25,7 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
       value
     }],
   }))
-  /* Allow to write in fullname */
+  /* Allow to write in full name */
   .replaceFieldWriting('fullname', (value) => {
     const [firstname, lastname] = value.split(' ');
     return {
@@ -38,7 +38,7 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
     { field: 'firstname', ascending: true },
     { field: 'lastname',  ascending: true },
   ])
-  /* Anonymize user allow to replace user's personnal data by fake data */
+  /* Anonymize user allow to replace user's personal data by fake data */
   .addAction('Anonymize user', {
     scope: 'Bulk',
     execute: async (context, resultBuilder) => {
