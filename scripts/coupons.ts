@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
-import { PoolClient, QueryResult } from 'pg';
+import { Pool, QueryResult } from 'pg';
 
-export default async function populateCoupons(client: PoolClient, userIds: number[]): Promise<number[]> {
+export default async function populateCoupons(client: Pool, userIds: number[]): Promise<number[]> {
   const ids: number[] = [];
 
   await client.query('DROP TABLE IF EXISTS "coupons" CASCADE');

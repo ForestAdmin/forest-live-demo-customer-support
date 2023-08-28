@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { PoolClient, QueryResult } from 'pg';
+import { Pool, QueryResult } from 'pg';
 
 
-export default async function populateComments (client: PoolClient, userIds: number[], ticketIds: number[]): Promise<number[]> {
+export default async function populateComments (client: Pool, userIds: number[], ticketIds: number[]): Promise<number[]> {
   const ids: number[] = [];
 
   await client.query('DROP TABLE IF EXISTS "comments" CASCADE');

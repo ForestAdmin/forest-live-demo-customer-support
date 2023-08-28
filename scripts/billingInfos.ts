@@ -6,9 +6,9 @@ address VARCHAR(255)
 */
 
 import { faker } from '@faker-js/faker';
-import { PoolClient, QueryResult } from 'pg';
+import { Pool, QueryResult } from 'pg';
 
-export default async function populateBillingInfos(client: PoolClient, userIds: number[]): Promise<number[]> {
+export default async function populateBillingInfos(client: Pool, userIds: number[]): Promise<number[]> {
   const ids: number[] = [];
 
   await client.query('DROP TABLE IF EXISTS "billing_infos" CASCADE');

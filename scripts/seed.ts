@@ -42,4 +42,5 @@ const pool = new Pool({
   console.log('Creating coupons...');
   await createCoupons(pool, userIds);
   console.log('Tables created!');
+  await pool.end();
 })();
