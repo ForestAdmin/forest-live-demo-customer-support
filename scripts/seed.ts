@@ -41,5 +41,5 @@ const pool = new Pool({
   await createComments(pool, userIds, ticketIds);
   console.log('Creating coupons...');
   await createCoupons(pool, userIds);
-  console.log('ok');
+  console.log('Tables created!');
 })();
