@@ -1,20 +1,24 @@
 import { faker } from '@faker-js/faker';
-import { Pool, QueryResult } from 'pg';
+import { Pool } from 'pg';
+
+import insertData from './utils';
 
 export default async function populateTickets (client: Pool, userIds: number[]): Promise<number[]> {
-  const ids: number[] = [];
+  const tableName = 'tickets';
 
-  await client.query('DROP TABLE IF EXISTS "tickets" CASCADE');
+  await client.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
+  await client.query('DROP TYPE IF EXISTS priority_enum');
 
+  await client.query(`CREATE TYPE priority_enum AS ENUM ('low', 'medium', 'high')`);
   await client.query(`
-      CREATE TABLE tickets (
-        id SERIAL PRIMARY KEY,
-        owner INT REFERENCES users(id),
-        opened_by INT REFERENCES users(id),
-        date DATE,
-        subject VARCHAR(255),
-        priority VARCHAR(50),
-        is_resolved BOOLEAN
+    CREATE TABLE "${tableName}" (
+      id SERIAL PRIMARY KEY,
+      owner INT REFERENCES users(id),
+      opened_by INT REFERENCES users(id),
+      date DATE,
+      subject VARCHAR(255),
+      priority priority_enum,
+      is_resolved BOOLEAN
     );
   `);
 
@@ -51,24 +55,12 @@ export default async function populateTickets (client: Pool, userIds: number[]):
     "Banned for Being Too Cool? Account Termination 🕶️",
   ];
 
-  for (let i = 0; i < ticketSubjects.length; i++) {
-      const ticket = {
-        owner: faker.helpers.arrayElement(userIds),
-        opened_by: faker.helpers.arrayElement(userIds),
-        date: faker.date.recent(),
-        subject: faker.helpers.arrayElement(ticketSubjects),
-        priority: faker.helpers.arrayElement(['low', 'medium', 'high']),
-        is_resolved: faker.datatype.boolean(),
-      };
-
-      const insertQuery = {
-          text: 'INSERT INTO "tickets" (owner, opened_by, date, subject, priority, is_resolved) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
-          values: Object.values(ticket),
-      };
-
-      const result: QueryResult<any> = await client.query(insertQuery);
-      ids.push(result.rows[0].id.toString());
-  }
-
-  return ids;
+  return insertData(client, tableName, ticketSubjects.length, (i) => ({
+    owner: faker.helpers.arrayElement(userIds),
+    opened_by: faker.helpers.arrayElement(userIds),
+    date: faker.date.recent(),
+    subject: ticketSubjects[i],
+    priority: faker.helpers.arrayElement(['low', 'medium', 'high']),
+    is_resolved: faker.datatype.boolean(),
+  }));
 }

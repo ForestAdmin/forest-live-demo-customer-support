@@ -1,18 +1,20 @@
 import { faker } from '@faker-js/faker';
-import { Pool, QueryResult } from 'pg';
+import { Pool } from 'pg';
+
+import insertData from './utils';
 
 export default async function populateCoupons(client: Pool, userIds: number[]): Promise<number[]> {
-  const ids: number[] = [];
+  const tableName = 'coupons';
 
-  await client.query('DROP TABLE IF EXISTS "coupons" CASCADE');
+  await client.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
 
   await client.query(`
-      CREATE TABLE coupons (
-        id SERIAL PRIMARY KEY,
-        user_id INT REFERENCES users(id),
-        discount_amount NUMERIC,
-        discount_percent NUMERIC,
-        name VARCHAR(255)
+    CREATE TABLE "${tableName}" (
+      id SERIAL PRIMARY KEY,
+      user_id INT REFERENCES users(id),
+      discount_amount NUMERIC,
+      discount_percent NUMERIC,
+      name VARCHAR(255)
     );
   `);
 
@@ -37,22 +39,10 @@ export default async function populateCoupons(client: Pool, userIds: number[]): 
     "GIFTWITHPURCHASE",
   ];
 
-  for (let i = 0; i < couponNames.length; i++) {
-      const coupon = {
-        user_id: faker.helpers.arrayElement(userIds),
-        discount_amount: (i%2) ? faker.finance.amount(0, 10) : 0,
-        discount_percent: !(i%2)? faker.finance.amount(0, 25) : 0,
-        name: couponNames[i],
-      };
-
-      const insertQuery = {
-          text: 'INSERT INTO "coupons" (user_id, discount_amount, discount_percent, name) VALUES ($1, $2, $3, $4) RETURNING id',
-          values: Object.values(coupon),
-      };
-
-      const result: QueryResult<any> = await client.query(insertQuery);
-      ids.push(result.rows[0].id.toString());
-  }
-
-  return ids;
+  return insertData(client, tableName, couponNames.length, (i) => ({
+    user_id: faker.helpers.arrayElement(userIds),
+    discount_amount: (i%2) ? faker.finance.amount(0, 10) : 0,
+    discount_percent: !(i%2)? faker.finance.amount(0, 25) : 0,
+    name: couponNames[i],
+  }));
 }

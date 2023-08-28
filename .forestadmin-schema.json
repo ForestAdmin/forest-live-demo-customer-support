@@ -1001,7 +1001,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": ["high", "low", "medium"],
           "field": "priority",
           "integration": null,
           "inverseOf": null,
@@ -1012,7 +1012,7 @@
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
-          "type": "String",
+          "type": "Enum",
           "validations": []
         },
         {

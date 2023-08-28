@@ -149,7 +149,7 @@ export type Schema = {
       'ticket:opened_by': number;
       'ticket:date': string;
       'ticket:subject': string;
-      'ticket:priority': string;
+      'ticket:priority': 'low' | 'medium' | 'high';
       'ticket:is_resolved': boolean;
       'ticket:user_through_owner:id': number;
       'ticket:user_through_owner:email': string;
@@ -347,7 +347,7 @@ export type Schema = {
       'opened_by': number;
       'date': string;
       'subject': string;
-      'priority': string;
+      'priority': 'low' | 'medium' | 'high';
       'is_resolved': boolean;
     };
     nested: {

@@ -1,37 +1,27 @@
 import { faker } from '@faker-js/faker';
-import { Pool, QueryResult } from 'pg';
+import { Pool } from 'pg';
+
+import insertData from './utils';
 
 export default async function populateMessages (client: Pool, userIds: number[]): Promise<number[]> {
-  const ids: number[] = [];
+  const tableName = 'messages';
 
-  await client.query('DROP TABLE IF EXISTS "messages" CASCADE');
+  await client.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
 
   await client.query(`
-      CREATE TABLE messages (
-        id SERIAL PRIMARY KEY,
-        sender INT REFERENCES users(id),
-        receiver INT REFERENCES users(id),
-        message TEXT,
-        date DATE
+    CREATE TABLE "${tableName}" (
+      id SERIAL PRIMARY KEY,
+      sender INT REFERENCES users(id),
+      receiver INT REFERENCES users(id),
+      message TEXT,
+      date DATE
     );
   `);
 
-  for (let i = 0; i < 1000; i++) {
-      const message = {
-        sender: faker.helpers.arrayElement(userIds),
-        receiver: faker.helpers.arrayElement(userIds),
-        message: faker.lorem.sentence(),
-        date: faker.date.recent(),
-      };
-
-      const insertQuery = {
-          text: 'INSERT INTO "messages" (sender, receiver, message, date) VALUES ($1, $2, $3, $4) RETURNING id',
-          values: Object.values(message),
-      };
-
-      const result: QueryResult<any> = await client.query(insertQuery);
-      ids.push(result.rows[0].id.toString());
-  }
-
-  return ids;
+  return insertData(client, tableName, 1000, () => ({
+    sender: faker.helpers.arrayElement(userIds),
+    receiver: faker.helpers.arrayElement(userIds),
+    message: faker.lorem.sentence(),
+    date: faker.date.recent(),
+  }));
 }

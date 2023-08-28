@@ -1,20 +1,22 @@
 import { faker } from '@faker-js/faker';
-import { Pool, QueryResult } from 'pg';
+import { Pool } from 'pg';
+
+import insertData from './utils';
 
 export default async function populateOrders(client: Pool, userIds: number[], couponsIds: number[]): Promise<number[]> {
-  const ids: number[] = [];
+  const tableName = 'orders';
 
-  await client.query('DROP TABLE IF EXISTS "orders" CASCADE');
+  await client.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
 
   await client.query(`
-      CREATE TABLE orders (
-        id SERIAL PRIMARY KEY,
-        user_id INT REFERENCES users(id),
-        coupon_id INT REFERENCES coupons(id),
-        initial_amount NUMERIC,
-        date DATE,
-        paid BOOLEAN,
-        pay_date DATE
+    CREATE TABLE "${tableName}" (
+      id SERIAL PRIMARY KEY,
+      user_id INT REFERENCES users(id),
+      coupon_id INT REFERENCES coupons(id),
+      initial_amount NUMERIC,
+      date DATE,
+      paid BOOLEAN,
+      pay_date DATE
     );
   `);
 
@@ -23,24 +25,12 @@ export default async function populateOrders(client: Pool, userIds: number[], co
   // We also want to allow null values
   filteredCouponIds.push(null);
 
-  for (let i = 0; i < 90; i++) {
-      const order = {
-        user_id: faker.helpers.arrayElement(userIds),
-        coupon_id: faker.helpers.arrayElement(filteredCouponIds),
-        initial_amount: faker.finance.amount(),
-        date: faker.date.recent(),
-        paid: faker.datatype.boolean(),
-        pay_date: faker.date.recent(),
-      };
-
-      const insertQuery = {
-          text: 'INSERT INTO "orders" (user_id, coupon_id, initial_amount, date, paid, pay_date) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
-          values: Object.values(order),
-      };
-
-      const result: QueryResult<any> = await client.query(insertQuery);
-      ids.push(result.rows[0].id.toString());
-  }
-
-  return ids;
+  return insertData(client, tableName, 90, () => ({
+    user_id: faker.helpers.arrayElement(userIds),
+    coupon_id: faker.helpers.arrayElement(filteredCouponIds),
+    initial_amount: faker.finance.amount(),
+    date: faker.date.recent(),
+    paid: faker.datatype.boolean(),
+    pay_date: faker.date.recent(),
+  }));
 }
