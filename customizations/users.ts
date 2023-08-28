@@ -111,23 +111,33 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
   .addAction('Moderate', {
     scope:'Single',
     form: [{
+      label: 'User Name',
+      type: 'String',
+      isReadOnly: true,
+      description: 'You will block the following user',
+      defaultValue: async (context) => (await context.getRecord(['fullname'])).fullname,
+    }, {
       label: 'reason',
       type: 'Enum',
       enumValues: ['resignation', 'dismissal', 'long-term illness', 'other'],
+      isRequired: true,
     }, {
       label: 'explanation',
       type: 'String',
+      description: 'Fill in the reason',
       if: (context) => context.formValues.reason === 'other',
     }],
     execute: async (context, resultBuilder) => {
-      const userId = await context.getRecordId();
+      const user = await context.getRecord(['id', 'is_blocked']);
+
+      if (user.is_blocked) return resultBuilder.success('User already blocked.');
 
       try {
         await context.dataSource.getCollection('users').update({
           conditionTree: {
             field: 'id',
             operator: 'Equal',
-            value: userId,
+            value: user.id,
           },
         }, { is_blocked: true });
 
