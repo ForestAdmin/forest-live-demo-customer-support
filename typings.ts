@@ -248,7 +248,7 @@ export type Schema = {
       'discount_amount': number;
       'discount_percent': number;
       'name': string;
-      'used_in_x_orders': string;
+      'used_in_x_orders': number;
     };
     nested: {
       'user': Schema['users']['plain'] & Schema['users']['nested'];
@@ -380,7 +380,7 @@ export type Schema = {
       'coupon:discount_amount': number;
       'coupon:discount_percent': number;
       'coupon:name': string;
-      'coupon:used_in_x_orders': string;
+      'coupon:used_in_x_orders': number;
       'coupon:user:id': number;
       'coupon:user:email': string;
       'coupon:user:signup_date': string;

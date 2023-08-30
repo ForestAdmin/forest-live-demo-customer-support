@@ -4,16 +4,20 @@ import { randomBytes } from 'crypto';
 import { Schema } from "../typings";
 
 export default (users: CollectionCustomizer<Schema, 'users'>) => {
-  /* Add a full name field that is computed from first name and last name */
+  // Create a new fullname field
   users.addField('fullname', {
+    // As this will be a concatenation of firstname and lastname, type is String
     columnType: 'String',
+    // fullname will depend on firstname & lastname
     dependencies: ['firstname', 'lastname'],
+    // Then, simply compute the value for each record
     getValues: (records) => {
       return records.map((record) => `${record.firstname} ${record.lastname}`);
     },
   })
-  /* Allow fullname to be filtered using the contains operator */
+  // We want to use the "contains" filter on the frontend, so we'll have to implement it
   .replaceFieldOperator('fullname', 'Contains', (value) => ({
+    // "Contains" on fullname is equivalent to "Or Contains" on firstname & lastname
     aggregator: 'Or',
     conditions: [{
       field: 'firstname',
@@ -25,7 +29,7 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
       value
     }],
   }))
-  /* Allow to write in full name */
+  // We define a way to handle "writing" the fullname virtual field. So here, we're splitting the input to firstname and lastname
   .replaceFieldWriting('fullname', (value) => {
     const [firstname, lastname] = value.split(' ');
     return {
@@ -33,12 +37,11 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
       lastname,
     };
   })
-  /* Allow to sort on fullname */
+  // We also want to sort on fullname, so here is the equivalent sort
   .replaceFieldSorting('fullname', [
     { field: 'firstname', ascending: true },
     { field: 'lastname',  ascending: true },
   ])
-  /* Anonymize user allow to replace user's personal data by fake data */
   .addAction('Anonymize user', {
     scope: 'Bulk',
     execute: async (context, resultBuilder) => {
