@@ -42,6 +42,8 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
     { field: 'firstname', ascending: true },
     { field: 'lastname',  ascending: true },
   ])
+  // Add an action that anonymize a specific set of user
+  // Changes their name, email, picture, cellphone, password, set them as blocked and also unlink their address
   .addAction('Anonymize user', {
     scope: 'Bulk',
     execute: async (context, resultBuilder) => {
@@ -85,6 +87,7 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
       }
     },
   })
+  // Change a user's plan by updating it's subscription
   .addAction('Change a plan', {
     scope: 'Single',
     form: [{
@@ -116,6 +119,7 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
       }
     },
   })
+  // Fake simulate a password reset sending action
   .addAction('Reset password', {
     scope:'Single',
     execute: async (context, resultBuilder) => {
@@ -129,13 +133,14 @@ export default (users: CollectionCustomizer<Schema, 'users'>) => {
             value: userId,
           },
         }, { password: randomBytes(16).toString('hex') });
-
+        // We do not encourage sending raw password as email, this is just for the example :)
         return resultBuilder.success('Password successfully updated, a mail has sended to the user with his new password.');
       }  catch(error) {
         return resultBuilder.error(`Failed to reset password ${error.message}.`);
       }
     },
   })
+  // Moderate a user
   .addAction('Moderate', {
     scope:'Single',
     form: [{
