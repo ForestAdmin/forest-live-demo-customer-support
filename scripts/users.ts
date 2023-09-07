@@ -1,37 +1,35 @@
 import { faker } from '@faker-js/faker';
-import { Pool } from 'pg';
+import { Knex } from 'knex';
 
-import insertData from './utils';
+import populate from './utils';
 
-export default async function populateUsers(client: Pool): Promise<number[]> {
+export default async function populateUsers(client: Knex): Promise<number[]> {
   const tableName = 'users';
 
-  await client.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
+  await client.raw(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
 
-  await client.query(`
-    CREATE TABLE "${tableName}" (
-      id SERIAL PRIMARY KEY,
-      email VARCHAR(255) NOT NULL,
-      signup_date DATE,
-      lastname VARCHAR(255),
-      firstname VARCHAR(255),
-      identity_picture VARCHAR(255),
-      birthdate DATE,
-      password VARCHAR(255) NOT NULL,
-      cellphone VARCHAR(30),
-      is_blocked BOOLEAN
-    );`
-  );
+  await client.schema.createTable(tableName, (table) => {
+    table.increments('id').primary();
+    table.string('email').notNullable();
+    table.date('signup_date');
+    table.string('lastname');
+    table.string('firstname');
+    table.string('identity_picture');
+    table.date('birthdate');
+    table.string('password').notNullable();
+    table.string('cellphone');
+    table.boolean('is_blocked');
+  });
 
-  return insertData(client, tableName, 150, () => ({
+  return populate(client, tableName, 150, () => ({
     email: faker.internet.email(),
     signup_date: faker.date.past(),
     lastname: faker.person.lastName(),
     firstname: faker.person.firstName(),
-    identity_picture: faker.internet.avatar(), 
-    birthdate: faker.date.past(), 
-    password: faker.internet.password(), 
-    cellphone: faker.phone.number(), 
+    identity_picture: faker.internet.avatar(),
+    birthdate: faker.date.past(),
+    password: faker.internet.password(),
+    cellphone: faker.phone.number(),
     is_blocked: faker.datatype.boolean(),
   }));
 }

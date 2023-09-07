@@ -1,7 +1,7 @@
+/* eslint-disable no-console */
 import 'dotenv/config';
 
-import pg from 'pg';
-
+import Knex from 'knex';
 import createUsers from './users';
 import createAddresses from './addresses';
 import createBillingInfos from './billingInfos';
@@ -13,34 +13,33 @@ import createComments from './comments';
 import createTickets from './tickets';
 import createCoupons from './coupons';
 
-const { Pool } = pg;
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+const knex = Knex({
+  client: 'pg',
+  connection: process.env.DATABASE_URL,
 });
-
 
 (async () => {
   console.log('Creating users...');
-  const userIds = await createUsers(pool);
+  const userIds = await createUsers(knex);
   console.log('Creating addresses...');
-  await createAddresses(pool, userIds);
+  await createAddresses(knex, userIds);
   console.log('Creating billing infos...');
+  await createBillingInfos(knex, userIds);
   console.log('Creating coupons...');
-  const couponIds = await createCoupons(pool, userIds);
-  await createBillingInfos(pool, userIds);
+  const couponIds = await createCoupons(knex, userIds);
+  await createBillingInfos(knex, userIds);
   console.log('Creating orders...');
-  await createOrders(pool, userIds, couponIds);
+  await createOrders(knex, userIds, couponIds);
   console.log('Creating plans...');
-  const planIds = await createPlans(pool);
+  const planIds = await createPlans(knex);
   console.log('Creating tickets...');
-  const ticketIds = await createTickets(pool, userIds)
+  const ticketIds = await createTickets(knex, userIds);
   console.log('Creating subscriptions...');
-  await createSubscriptions(pool, userIds, planIds);
+  await createSubscriptions(knex, userIds, planIds);
   console.log('Creating messages...');
-  await createMessages(pool, userIds);
+  await createMessages(knex, userIds);
   console.log('Creating comments...');
-  await createComments(pool, userIds, ticketIds);
+  await createComments(knex, userIds, ticketIds);
   console.log('Tables created!');
-  await pool.end();
+  await knex.destroy();
 })();

@@ -1,33 +1,31 @@
 import { faker } from '@faker-js/faker';
-import { Pool } from 'pg';
+import { Knex } from 'knex';
 
-import insertData from './utils';
+import populate from './utils';
 
-export default async function populatePlans(client: Pool): Promise<number[]> {
+export default async function populatePlans(client: Knex): Promise<number[]> {
   const tableName = 'plans';
 
-  await client.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
+  await client.raw(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
 
-  await client.query(`
-    CREATE TABLE "${tableName}" (
-      id SERIAL PRIMARY KEY,
-      name VARCHAR(255),
-      monthly_cost NUMERIC,
-      allowed_discount NUMERIC,
-      dedicated_support BOOLEAN,
-      allowed_number_of_requests INT,
-      has_access_to_premium BOOLEAN
-    );
-  `);
+  await client.schema.createTable(tableName, table => {
+    table.increments('id').primary();
+    table.string('name');
+    table.decimal('monthly_cost');
+    table.decimal('allowed_discount');
+    table.boolean('dedicated_support');
+    table.integer('allowed_number_of_requests');
+    table.boolean('has_access_to_premium');
+  });
 
   const planNames = ['pro', 'plus', 'enterprise', 'free'];
 
-  return insertData(client, tableName, planNames.length, (i) => ({
+  return populate(client, tableName, planNames.length, i => ({
     name: planNames[i],
     monthly_cost: faker.finance.amount(),
     allowed_discount: faker.finance.amount(),
     dedicated_support: faker.datatype.boolean(),
-    allowed_number_of_requests: faker.number.int( { min: 1, max: 100}),
+    allowed_number_of_requests: faker.number.int({ min: 1, max: 100 }),
     has_access_to_premium: faker.datatype.boolean(),
   }));
 }

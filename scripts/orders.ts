@@ -1,31 +1,33 @@
 import { faker } from '@faker-js/faker';
-import { Pool } from 'pg';
+import { Knex } from 'knex';
 
-import insertData from './utils';
+import populate from './utils';
 
-export default async function populateOrders(client: Pool, userIds: number[], couponsIds: number[]): Promise<number[]> {
+export default async function populateOrders(
+  client: Knex,
+  userIds: number[],
+  couponsIds: number[],
+): Promise<number[]> {
   const tableName = 'orders';
 
-  await client.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
+  await client.raw(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
 
-  await client.query(`
-    CREATE TABLE "${tableName}" (
-      id SERIAL PRIMARY KEY,
-      user_id INT REFERENCES users(id),
-      coupon_id INT REFERENCES coupons(id),
-      initial_amount NUMERIC,
-      date DATE,
-      paid BOOLEAN,
-      pay_date DATE
-    );
-  `);
+  await client.schema.createTable(tableName, table => {
+    table.increments('id').primary();
+    table.integer('user_id').references('users.id');
+    table.integer('coupon_id').references('coupons.id');
+    table.decimal('initial_amount');
+    table.date('date');
+    table.boolean('paid');
+    table.date('pay_date');
+  });
 
   // We don't want to use all the coupons, so we filter them
-  const filteredCouponIds = couponsIds.filter((_, index) => (index%2));
+  const filteredCouponIds = couponsIds.filter((_, index) => index % 2);
   // We also want to allow null values
   filteredCouponIds.push(null);
 
-  return insertData(client, tableName, 90, () => ({
+  return populate(client, tableName, 90, () => ({
     user_id: faker.helpers.arrayElement(userIds),
     coupon_id: faker.helpers.arrayElement(filteredCouponIds),
     initial_amount: faker.finance.amount(),

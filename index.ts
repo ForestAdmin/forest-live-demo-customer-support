@@ -1,5 +1,4 @@
 import type { SslMode } from '@forestadmin/datasource-sql';
-import type { Schema } from './typings';
 
 import 'dotenv/config';
 import { createAgent } from '@forestadmin/agent';
@@ -8,6 +7,8 @@ import usersCustomization from './customizations/users';
 import ticketsCustomization from './customizations/tickets';
 import ordersCustomization from './customizations/orders';
 import couponsCustomization from './customizations/coupons';
+
+import type { Schema } from './typings';
 
 const agent = createAgent<Schema>({
   authSecret: process.env.FOREST_AUTH_SECRET!,
@@ -35,8 +36,7 @@ agent
 agent.mountOnStandaloneServer(Number(process.env.APPLICATION_PORT));
 
 agent.start().catch(error => {
-  console.error('\x1b[31merror:\x1b[0m Forest Admin agent failed to start\n');
-  console.error('');
-  console.error(error.stack);
+  // eslint-disable-next-line no-console
+  console.error('\x1b[31merror:\x1b[0m Forest Admin agent failed to start\n', error.stack);
   process.exit(1);
 });

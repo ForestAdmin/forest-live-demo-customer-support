@@ -1,28 +1,28 @@
 import { faker } from '@faker-js/faker';
-import { Pool } from 'pg';
+import { Knex } from 'knex';
 
-import insertData from './utils';
+import populate from './utils';
 
+export default async function populateSubscriptions(
+  client: Knex,
+  userIds: number[],
+  planIds: number[],
+): Promise<number[]> {
+  const tableName = 'subscriptions';
 
-export default async function populateSubscriptions (client: Pool, userIds: number[], planIds: number[]): Promise<number[]> {
-  const tableName = 'subscriptions'
+  await client.raw(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
 
-  await client.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
-
-  await client.query(`
-    CREATE TABLE "${tableName}" (
-      id SERIAL PRIMARY KEY,
-      plan_id INT REFERENCES plans(id),
-      user_id INT REFERENCES users(id),
-      subscription_date DATE,
-      UNIQUE(user_id)
-    );
-  `);
+  await client.schema.createTable(tableName, table => {
+    table.increments('id').primary();
+    table.integer('plan_id').references('plans.id');
+    table.integer('user_id').references('users.id');
+    table.date('subscription_date');
+  });
 
   const userIdsCopy = [...userIds];
 
-  return insertData(client, tableName, 80, () => {
-    const index = faker.helpers.rangeToNumber({min: 0, max: userIdsCopy.length-1});
+  return populate(client, tableName, 80, () => {
+    const index = faker.helpers.rangeToNumber({ min: 0, max: userIdsCopy.length - 1 });
 
     return {
       plan_id: faker.helpers.arrayElement(planIds),

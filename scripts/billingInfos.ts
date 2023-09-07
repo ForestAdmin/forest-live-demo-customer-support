@@ -1,24 +1,25 @@
 import { faker } from '@faker-js/faker';
-import { Pool } from 'pg';
+import { Knex } from 'knex';
 
-import insertData from './utils';
+import populate from './utils';
 
-export default async function populateBillingInfos(client: Pool, userIds: number[]): Promise<number[]> {
+export default async function populateBillingInfos(
+  client: Knex,
+  userIds: number[],
+): Promise<number[]> {
   const tableName = 'billing_infos';
 
-  await client.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
+  await client.raw(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
 
-  await client.query(`
-      CREATE TABLE "${tableName}" (
-        id SERIAL PRIMARY KEY,
-        user_id INT REFERENCES users(id),
-        card_number VARCHAR(20),
-        card_owner VARCHAR(255),
-        address VARCHAR(255)
-    );
-  `);
+  await client.schema.createTable(tableName, table => {
+    table.increments('id').primary();
+    table.integer('user_id').references('users.id');
+    table.string('card_number');
+    table.string('card_owner');
+    table.string('address');
+  });
 
-  return insertData(client, tableName, 100, () => ({
+  return populate(client, tableName, 100, () => ({
     user_id: faker.helpers.arrayElement(userIds),
     card_number: faker.finance.creditCardNumber('visa'),
     card_owner: faker.finance.accountName(),
