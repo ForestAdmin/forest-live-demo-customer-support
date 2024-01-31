@@ -15,7 +15,7 @@ export default async function populateSubscriptions(
   await client.schema.createTable(tableName, table => {
     table.increments('id').primary();
     table.integer('plan_id').references('plans.id');
-    table.integer('user_id').references('users.id');
+    table.integer('user_id').references('users.id').unique();
     table.date('subscription_date');
   });
 
