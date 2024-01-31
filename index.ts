@@ -15,7 +15,7 @@ const agent = createAgent<Schema>({
   envSecret: process.env.FOREST_ENV_SECRET!,
 
   isProduction: process.env.NODE_ENV === 'production',
-
+  
   typingsPath: './typings.ts',
   typingsMaxDepth: 5,
 });

@@ -624,7 +624,7 @@
           "validations": []
         },
         {
-          "defaultValue": null,
+          "defaultValue": false,
           "enums": [],
           "field": "paid",
           "integration": null,
@@ -719,7 +719,7 @@
           "validations": []
         },
         {
-          "defaultValue": null,
+          "defaultValue": false,
           "enums": [],
           "field": "dedicated_support",
           "integration": null,
@@ -735,7 +735,7 @@
           "validations": []
         },
         {
-          "defaultValue": null,
+          "defaultValue": false,
           "enums": [],
           "field": "has_access_to_premium",
           "integration": null,
@@ -883,7 +883,7 @@
           "enums": null,
           "field": "user",
           "integration": null,
-          "inverseOf": "subscription",
+          "inverseOf": "subscriptions",
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
@@ -984,7 +984,7 @@
           "validations": []
         },
         {
-          "defaultValue": null,
+          "defaultValue": false,
           "enums": [],
           "field": "is_resolved",
           "integration": null,
@@ -1001,7 +1001,7 @@
         },
         {
           "defaultValue": null,
-          "enums": ["high", "low", "medium"],
+          "enums": [],
           "field": "priority",
           "integration": null,
           "inverseOf": null,
@@ -1012,7 +1012,7 @@
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
-          "type": "Enum",
+          "type": "String",
           "validations": []
         },
         {
@@ -1114,6 +1114,18 @@
             }
           ],
           "hooks": {"load": true, "change": ["changeHook"]}
+        },
+        {
+          "id": "users-4-impersonate-this-user",
+          "name": "Impersonate this user",
+          "type": "single",
+          "baseUrl": null,
+          "endpoint": "/forest/_actions/users/4/impersonate-this-user",
+          "httpMethod": "POST",
+          "redirect": null,
+          "download": false,
+          "fields": [],
+          "hooks": {"load": false, "change": ["changeHook"]}
         },
         {
           "id": "users-3-moderate",
@@ -1335,7 +1347,7 @@
           "validations": []
         },
         {
-          "defaultValue": null,
+          "defaultValue": false,
           "enums": [],
           "field": "is_blocked",
           "integration": null,
@@ -1452,18 +1464,18 @@
         {
           "defaultValue": null,
           "enums": null,
-          "field": "subscription",
+          "field": "subscriptions",
           "integration": null,
           "inverseOf": "user",
-          "isFilterable": true,
+          "isFilterable": false,
           "isPrimaryKey": false,
           "isReadOnly": false,
           "isRequired": false,
           "isSortable": true,
           "isVirtual": false,
           "reference": "subscriptions.id",
-          "relationship": "HasOne",
-          "type": "Number",
+          "relationship": "HasMany",
+          "type": ["Number"],
           "validations": []
         },
         {
@@ -1514,7 +1526,7 @@
   ],
   "meta": {
     "liana": "forest-nodejs-agent",
-    "liana_version": "1.17.0",
+    "liana_version": "1.36.18",
     "liana_features": null,
     "stack": {"engine": "nodejs", "engine_version": "18.14.0"}
   }

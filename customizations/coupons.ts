@@ -17,6 +17,8 @@ export default (coupons: CollectionCustomizer<Schema, 'coupons'>) => {
       // Then we express how to compute the field
       // "records" gives you the list of record's dependency, so in this case, an array of { id: xx }
       getValues: async (records, context) => {
+        if (records.length === 0) return [];
+        
         // Here, we are using the native driver (postgres) to run a raw SQL query that will count the total number of order for each coupon displayed
         const rows = await context.collection.nativeDriver.rawQuery(
           'SELECT coupon_id, COUNT(*) AS count FROM orders WHERE coupon_id IN (:ids) GROUP BY coupon_id',
