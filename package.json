@@ -20,8 +20,8 @@
     ]
   },
   "dependencies": {
-    "@forestadmin/agent": "^1.0.0",
-    "@forestadmin/datasource-sql": "^1.0.0",
+    "@forestadmin/agent": "^1.64.0",
+    "@forestadmin/datasource-sql": "^1.17.1",
     "dotenv": "^16.0.1",
     "knex": "^2.5.1",
     "pg": "^8.11.3",
