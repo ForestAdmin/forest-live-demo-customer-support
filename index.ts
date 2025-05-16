@@ -33,7 +33,7 @@ agent
   .customizeCollection('orders', ordersCustomization)
   .customizeCollection('coupons', couponsCustomization);
 
-agent.mountOnStandaloneServer(Number(process.env.APPLICATION_PORT));
+agent.mountOnStandaloneServer(Number(process.env.APPLICATION_PORT || process.env.PORT));
 
 agent.start().catch(error => {
   // eslint-disable-next-line no-console
